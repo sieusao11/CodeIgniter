@@ -2,7 +2,7 @@
   <div class="sidebar-wrapper">
     <ul class="nav">
       <li class="nav-item">
-        <a class="nav-link" href="/sample_app/admin/index/home">
+        <a class="nav-link" href="/sample_app/admin//users/index">
           <i class="nc-icon nc-chart-pie-35"></i>
           <p>Index</p>
         </a>

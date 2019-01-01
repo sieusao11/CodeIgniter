@@ -15,6 +15,7 @@
 		// list users
 		function getAll()
 		{
+			$this->db->order_by("id", "desc");
 			$query = $this->db->get($this->table);
 			return $query->result_array();
 		}
@@ -40,8 +41,28 @@
 			}
 			if(is_numeric($id)) {
 				$this->db->where("id", $id)
-						 ->delete($this->table);
+						->delete($this->table);
 			}
+		}
+
+		// Update table
+		public function update($id, $data)
+		{
+			if(!$id) {
+				return false;
+			}else {
+				$this->db->where("id", $id)
+						->update($this->table, $data);
+				return true;
+			}
+		}
+
+		// tim theo id
+		public function findById($id)
+		{
+			$this->db->where('id', $id);
+			$query = $this->db->get($this->table);
+			return $query->row();
 		}
 	}
 ?>

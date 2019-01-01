@@ -29,14 +29,29 @@
 				$this->form_validation->set_rules("address", "Address", "required");
 				$this->form_validation->set_rules("birthday", "Birthday", "required");
 				$this->form_validation->set_rules("gender", "Gender");
+				$this->form_validation->set_rules("image", "Image");
 				if($this->form_validation->run())
 				{
+					if(!empty($_FILES['image']['name']))
+					{
+						$this->load->library('upload', $config);
+						$config['upload_path'] = './uploads/';
+						$config['allowed_types'] = 'jpg|jpeg|png|gif';
+						if($this->upload->do_upload('image')) 
+				        {
+				          $uploadData = $this->upload->data();
+				          $image = $uploadData['file_name'];
+				        } else{
+				          $image = '';
+				        }
+					}
 					$name = $this->input->post("fullname");
 					$email = $this->input->post("email");
 					$phone = $this->input->post("phone");
 					$address = $this->input->post("address");
 					$birthday = $this->input->post("birthday");
 					$gender = $this->input->post("gender");
+					$image = $this->input->post("image");
 					$input = array(
 						"fullname" => $name,
 						"email" => $email,
@@ -44,6 +59,7 @@
 						"address" => $address,
 						"birthday" => $birthday,
 						"gender" => $gender,
+						"image" => $image
 					);
 					$this->user_model->create($input);
 					$this->session->set_flashdata("msg", "Them thanh cong!!!");
@@ -106,5 +122,47 @@
 				redirect("admin/users/index");
 			}
 		}
+
+		public function edit_users()
+		{
+			$id = $this->input->get("id");
+			if(!empty($id) && is_numeric($id))
+			{
+				$data['temp'] = "admin/edit_user";
+				$findById = $this->user_model->findById($id);
+				if(!empty($findById))
+				{
+					$data['data'] = $findById;
+					if($this->input->post())
+					{
+						$this->form_validation->set_rules("fullname", "Full name", "required|min_length[6]|callback_checkFullname");
+						$this->form_validation->set_rules("email", "Email", "trim|required|valid_email|callback_checkEmail");
+						$this->form_validation->set_rules("phone", "Phone number", "required|regex_match[/^[0-9]{11}$/]|callback_checkPhone");
+						$this->form_validation->set_rules("address", "Address", "required");
+						$this->form_validation->set_rules("birthday", "Birthday", "required");
+						$this->form_validation->set_rules("gender", "Gender");
+						if($this->form_validation->run())
+						{
+							$this->user_model->update($id, $this->input->post());
+							$this->session->set_flashdata("msg", "successfully edit!");
+							redirect("admin/users/index");
+						}
+						if($this->form_validation->run() === FALSE)
+						{
+							$this->session->set_flashdata('msg', validation_errors('<p class="error">', '</p>'));
+						}
+						else {
+							$data['data'] = (object)$this->input->post();
+							$this->session->set_flashdata('msg', validation_errors());
+						}
+					}
+					$this->load->view("admin/index", $data);
+				}
+				else {
+					redirect("admin/users/index");
+				}
+			}
+		}
+
 	}
 ?>

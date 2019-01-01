@@ -56,17 +56,17 @@
 					            <tr>
 									<td><?php echo $item["id"] ?></td>
 									<td><?php echo $item["fullname"] ?></td>
-									<td></td>
+									<td><img src="/sample_app/uploads/<?php echo $item["image"] ?>" style="width: 100px; height: 100px;" /></td>
 									<td><?php echo $item["birthday"] ?></td>
 									<td><?php echo $item["gender"] ?></td>
 									<td><?php echo $item["email"] ?></td>
 									<td><?php echo $item["phone"] ?></td>
 									<td><?php echo $item["address"] ?></td>
 									<td class="td-actions text-right">
-									    <a class="btn btn-success btn-link btn-xs" title="Edit" href="/sample_app/admin/index/">
+									    <a class="btn btn-success btn-link btn-xs" title="Edit" href="/sample_app/admin/users/edit_users?id=<?php echo $item['id'] ?>">
 									    	<i class="fa fa-edit"></i>
 										</a>    
-										<a class="btn btn-danger btn-link btn-xs delete" title="Remove" data-id="<?php echo $item['id'] ?>"  href="#">
+										<a class="btn btn-danger btn-link btn-xs delete" title="Remove" data-id="<?php echo $item['id'] ?>" href="#">
 									      	<i class="fa fa-times"></i>
 										</a>  
 									</td>
@@ -105,7 +105,7 @@
 
 <script type="text/javascript">
 	$('.delete').on('click', function(){
-		var id = $(this).attr('date-id');
+		var id = $(this).attr('data-id');
 		$('.id_delete').val(id);
 		$('#deletePopup').modal('show');
 	});
