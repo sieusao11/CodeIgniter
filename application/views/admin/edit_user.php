@@ -7,8 +7,9 @@
 				       <h4 class="card-title">New Team</h4>
 				    </div>
 				    <div class="card-body">
-					    <form class="new_team" id="new_team" enctype="multipart/form-data" action="" method="post">
+					    <form action="" method="POST" enctype="multipart/form-data">
 					    	<input type="hidden" name="id" value="<?php echo $data->id ?>">
+					    	<input type="hidden" name="image" value="<?php echo $data->image ?>">
 							<div class="form-group">
 							    <label>Full Name</label>
 							    <p><?php echo form_error("fullname") ?></p>
@@ -47,7 +48,8 @@
 						  	</div>
 							<div class="form-group">
 								<label for="team_Image">Image</label>
-							    <input class="form-control" type="file" name="image">
+							    <input class="form-control" type="file" name="image" value="/sample_app/uploads/<?php echo $data->image ?>">
+							    <img src="/sample_app/uploads/<?php echo $data->image ?>" style="width: 100px; height: 100px">
 							</div>
 							<div class="form-group submit_button">
 								<input type="submit" value="Save Changes" class="btn btn-primary">

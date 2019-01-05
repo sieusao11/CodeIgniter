@@ -28,22 +28,22 @@
 				$this->form_validation->set_rules("phone", "Phone number", "required|regex_match[/^[0-9]{11}$/]|callback_checkPhone");
 				$this->form_validation->set_rules("address", "Address", "required");
 				$this->form_validation->set_rules("birthday", "Birthday", "required");
-				$this->form_validation->set_rules("gender", "Gender");
+				$this->form_validation->set_rules("gender", "Gender", "required");
 				$this->form_validation->set_rules("image", "Image");
 				if($this->form_validation->run())
 				{
 					if(!empty($_FILES['image']['name']))
 					{
-						$this->load->library('upload', $config);
 						$config['upload_path'] = './uploads/';
 						$config['allowed_types'] = 'jpg|jpeg|png|gif';
-						if($this->upload->do_upload('image')) 
-				        {
-				          $uploadData = $this->upload->data();
-				          $image = $uploadData['file_name'];
-				        } else{
-				          $image = '';
-				        }
+						$this->load->library('upload', $config);
+						if($this->upload->do_upload('image'))
+						{
+							$uploadData = $this->upload->data();
+							$image = $uploadData['file_name'];
+						}else {
+							$error = array('error' => $this->upload->display_errors());
+						}
 					}
 					$name = $this->input->post("fullname");
 					$email = $this->input->post("email");
@@ -51,7 +51,6 @@
 					$address = $this->input->post("address");
 					$birthday = $this->input->post("birthday");
 					$gender = $this->input->post("gender");
-					$image = $this->input->post("image");
 					$input = array(
 						"fullname" => $name,
 						"email" => $email,
@@ -140,10 +139,42 @@
 						$this->form_validation->set_rules("phone", "Phone number", "required|regex_match[/^[0-9]{11}$/]|callback_checkPhone");
 						$this->form_validation->set_rules("address", "Address", "required");
 						$this->form_validation->set_rules("birthday", "Birthday", "required");
-						$this->form_validation->set_rules("gender", "Gender");
+						$this->form_validation->set_rules("gender", "Gender", "required");
+						$this->form_validation->set_rules("image", "Image");
 						if($this->form_validation->run())
 						{
-							$this->user_model->update($id, $this->input->post());
+							if(!empty($_FILES['image']['name']))
+							{
+								$config['upload_path'] = './uploads/';
+								$config['allowed_types'] = 'jpg|jpeg|png|gif';
+								$this->load->library('upload', $config);
+								if($this->upload->do_upload('image'))
+								{
+									$uploadData = $this->upload->data();
+									$image = $uploadData['file_name'];
+								}else {
+									$error = array('error' => $this->upload->display_errors());
+								}
+							}else {
+								$image = $this->input->post("image");
+							}
+							$name = $this->input->post("fullname");
+							$email = $this->input->post("email");
+							$phone = $this->input->post("phone");
+							$address = $this->input->post("address");
+							$birthday = $this->input->post("birthday");
+							$gender = $this->input->post("gender");
+							$input = array(
+								"fullname" => $name,
+								"email" => $email,
+								"phone" => $phone,
+								"address" => $address,
+								"birthday" => $birthday,
+								"gender" => $gender,
+								"image" => $image
+							);
+
+							$this->user_model->update($id, $input);
 							$this->session->set_flashdata("msg", "successfully edit!");
 							redirect("admin/users/index");
 						}

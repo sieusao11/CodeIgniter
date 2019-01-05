@@ -58,7 +58,7 @@
 									<td><?php echo $item["fullname"] ?></td>
 									<td><img src="/sample_app/uploads/<?php echo $item["image"] ?>" style="width: 100px; height: 100px;" /></td>
 									<td><?php echo $item["birthday"] ?></td>
-									<td><?php echo $item["gender"] ?></td>
+									<td><?php echo $item["gender"] == 0 ? "Male" : "Female" ?></td>
 									<td><?php echo $item["email"] ?></td>
 									<td><?php echo $item["phone"] ?></td>
 									<td><?php echo $item["address"] ?></td>
